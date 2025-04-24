@@ -1,13 +1,17 @@
 import { RequestHandler } from 'express';
 import { supabase } from '../config/supabase';
 import { Monarch } from '../types/entities';
+import { PostgrestError } from '@supabase/supabase-js';
 export {}; // <--- add this temporarily to make sure TypeScript treats it as a module
 
 export const getMonarchs : RequestHandler = async (req, res) => {
   try {
     const { data, error } = await supabase
       .from('Monarch')
-      .select('*');
+      .select('*') as { 
+        data: Monarch[] | null; 
+        error: PostgrestError | null;
+      };
     
     if (error) throw error;
     
